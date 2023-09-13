@@ -1,0 +1,49 @@
+/* CSS untuk grid */
+.product-details .grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Membagi modal menjadi dua grid */
+  gap: 20px;
+  /* Jarak antara grid */
+}
+
+.product-details .grid-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-details .grid-left .product-thumbnail {
+  margin-bottom: 20px;
+}
+
+/* CSS untuk gambar produk */
+.product-details .product-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* Grid untuk gambar produk */
+  gap: 10px;
+}
+
+.product-details .product-images img {
+  width: 100%;
+  /* Lebar gambar */
+  height: auto;
+}
+
+/* CSS untuk informasi produk di sebelah kanan */
+.product-details .grid-right .product-info {
+  text-align: left;
+}
+
+.product-details .product-price-rating p,
+.product-details .product-category-brand p,
+.product-details .grid-right .product-info p {
+  margin: 5px 0;
+}
+
+.product-details .product-thumbnail img {
+  width: 700px;
+  /* Lebar thumbnail */
+  height: auto;
+  /* Tinggi disesuaikan secara otomatis agar tidak merusak aspek rasio */
+}

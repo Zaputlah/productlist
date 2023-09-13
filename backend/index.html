@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Penyimpanan Data</title>
+</head>
+
+<body>
+    <h1>Form Penyimpanan Data</h1>
+    <form id="formPenyimpanan"> <!-- Membuat formulir untuk memasukkan data -->
+        <label for="nopesanan">No Pesanan:</label>
+        <input type="text" id="nopesanan" name="nopesanan" required><br> <!-- Input nomor pesanan -->
+
+        <label for="tanggal">Tanggal:</label>
+        <input type="datetime-local" id="tanggal" name="tanggal" required><br> <!-- Input tanggal -->
+
+        <label for="nmsupplier">Nama Supplier:</label>
+        <input type="text" id="nmsupplier" name="nmsupplier" required><br> <!-- Input nama supplier -->
+
+        <label for="nmproduct">Nama Product:</label>
+        <input type="text" id="nmproduct" name="nmproduct" required><br> <!-- Input nama produk -->
+
+        <label for="total">Total:</label>
+        <input type="text" id="total" name="total" required><br> <!-- Input total pesanan -->
+
+        <button type="submit">Simpan</button> <!-- Tombol "Simpan" untuk mengirim data ke server -->
+    </form>
+
+    <script>
+        document.getElementById('formPenyimpanan').addEventListener('submit', async (e) => { // Menambahkan event listener untuk menangani pengiriman formulir
+            e.preventDefault(); // Mencegah pengiriman formulir secara default
+
+            const nopesanan = document.getElementById('nopesanan').value; // Mengambil nilai nomor pesanan
+            const tanggal = document.getElementById('tanggal').value; // Mengambil nilai tanggal
+            const nmsupplier = document.getElementById('nmsupplier').value; // Mengambil nilai nama supplier
+            const nmproduct = document.getElementById('nmproduct').value; // Mengambil nilai nama produk
+            const total = document.getElementById('total').value; // Mengambil nilai total pesanan
+
+
+            // Validasi total di sisi klien
+            if (/^\d+(\.\d{2})?$/.test(total)) { // Memeriksa apakah total sesuai dengan format yang diharapkan
+                // Input sesuai dengan format yang diharapkan
+                try {
+                    const response = await fetch('/simpanData', { // Mengirim permintaan POST ke server
+                        method: 'POST', // Metode permintaan
+                        headers: {
+                            'Content-Type': 'application/json', // Header tipe konten
+                        },
+                        body: JSON.stringify({ nopesanan, tanggal, nmsupplier, nmproduct, total }) // Mengirim data dalam format JSON ke server
+                    });
+                    // console.log(response); // Tambahkan console.log di sini
+                    // return;
+
+                    if (response.ok) { // Jika respons dari server OK
+                        const data = await response.json(); // Mendapatkan data respons JSON dari server
+
+                        if (data.success) { // Jika operasi penyimpanan data berhasil di server
+                            alert('Data berhasil disimpan'); // Menampilkan pesan sukses
+                            document.getElementById('formPenyimpanan').reset(); // Mereset formulir untuk pengisian data berikutnya
+                        } else {
+                            alert('Terjadi kesalahan saat menyimpan data'); // Menampilkan pesan kesalahan saat penyimpanan data di server
+                        }
+                    } else {
+                        console.error('Error:', response.status, response.statusText);
+                        alert('Terjadi kesalahan saat mengirim permintaan ke server'); // Menampilkan pesan kesalahan saat pengiriman permintaan ke server
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim permintaan ke server'); // Menampilkan pesan kesalahan jika terjadi masalah saat mengirim permintaan
+                }
+            } else {
+                // Input tidak sesuai dengan format yang diharapkan
+                alert('Format input tidak valid'); // Menampilkan pesan kesalahan jika format input tidak sesuai
+            }
+        });
+    </script>
+</body>
+
+</html>
